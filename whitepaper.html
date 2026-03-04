@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portico — White Paper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+SC:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #3a3530;
+    --ink-muted: #7a7268;
+    --parchment: #f5f0e8;
+    --parchment-mid: #ede7d9;
+    --parchment-dark: #d8d0c0;
+    --gold: #b8934a;
+    --gold-light: #d4aa6a;
+    --rule: rgba(184,147,74,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--parchment);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%;
+    z-index: 999;
+    transition: width 0.1s linear;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px;
+    position: relative;
+    background: linear-gradient(180deg, var(--parchment-mid) 0%, var(--parchment) 100%);
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero::before, .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; width: 1px;
+    background: linear-gradient(180deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+  }
+  .hero::before { left: 80px; }
+  .hero::after  { right: 80px; }
+
+  .wordmark {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(3rem, 10vw, 6.5rem);
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--ink);
+    margin-bottom: 0.1em;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.2s;
+  }
+  .hero-rule {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 1.2rem auto;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 0.65s;
+  }
+  .hero-arch {
+    width: clamp(160px, 24vw, 240px);
+    display: block;
+    margin: 0 auto 1.8rem;
+    filter: contrast(0.8) brightness(1.08);
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.75s;
+  }
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(0.95rem, 2.2vw, 1.3rem);
+    font-weight: 300;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    max-width: 540px;
+    margin: 0 auto 0.8rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1s;
+  }
+  .hero-tag {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 1.3s;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 1.9s;
+  }
+  .scroll-hint span {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite 2.5s;
+  }
+
+  /* ── Main layout ── */
+  main { max-width: 780px; margin: 0 auto; padding: 80px 40px 120px; }
+
+  .section {
+    margin-bottom: 72px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── Section labels & headings ── */
+  .section-label {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-numeral {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  h1.page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    margin: 28px 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+
+  /* ── Body text ── */
+  p {
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.1em;
+    line-height: 1.9;
+  }
+  p em { font-style: italic; color: var(--ink); }
+  p strong { font-weight: 500; color: var(--ink); }
+
+  /* ── Pull quote ── */
+  .pull {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+    border-left: 2px solid var(--gold);
+    padding: 12px 0 12px 28px;
+    margin: 36px 0;
+    line-height: 1.7;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 1.08rem;
+    color: var(--ink);
+    margin: 1.5em 0 0.8em;
+    line-height: 1.6;
+  }
+
+  /* ── Figure ── */
+  .figure {
+    margin: 44px 0;
+    text-align: center;
+  }
+  .figure img {
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+    display: block;
+    margin: 0 auto 14px;
+    filter: contrast(0.88) brightness(1.04);
+    border: 1px solid var(--parchment-dark);
+    border-radius: 2px;
+  }
+  .figure-caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Domain grid ── */
+  .domain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 28px 0;
+  }
+  .domain-card {
+    background: var(--parchment-mid);
+    border-left: 3px solid var(--parchment-dark);
+    padding: 18px 20px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  .domain-card:hover { border-left-color: var(--gold); background: var(--parchment-dark); }
+  .domain-card-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .domain-card-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .domain-card-directive {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ── Horsemen list ── */
+  .horsemen-list { list-style: none; margin: 24px 0; }
+  .horseman-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--parchment-dark);
+    align-items: start;
+  }
+  .horsemen-list li:first-child { border-top: 1px solid var(--parchment-dark); }
+  .horseman-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .horseman-domain {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    display: block;
+    margin-top: 2px;
+  }
+  .horseman-desc {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── Risk Engine layers ── */
+  .risk-layers { margin: 28px 0; display: flex; flex-direction: column; gap: 2px; }
+  .risk-layer {
+    padding: 16px 20px;
+    background: var(--parchment-mid);
+    border-left: 3px solid var(--parchment-dark);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .risk-layer:hover { border-left-color: var(--gold); background: var(--parchment-dark); }
+  .risk-layer-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .risk-layer-desc {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .risk-layer-example {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+
+  /* ── Theme blocks (Appendix) ── */
+  .theme-block {
+    margin: 32px 0;
+    padding: 24px 28px;
+    background: var(--parchment-mid);
+    border-top: 2px solid var(--rule);
+  }
+  .theme-block h4 {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .theme-block ul { list-style: none; padding: 0; }
+  .theme-block ul li {
+    font-size: 0.97rem;
+    color: var(--ink-soft);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--parchment-dark);
+    line-height: 1.6;
+  }
+  .theme-block ul li:last-child { border-bottom: none; }
+  .theme-block ul li::before {
+    content: '—';
+    color: var(--gold);
+    margin-right: 10px;
+    font-size: 0.8rem;
+  }
+
+  /* ── Domain blueprint (appendix) ── */
+  .domain-blueprint {
+    margin-bottom: 64px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .domain-blueprint:last-child { border-bottom: none; }
+  .blueprint-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .blueprint-num {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .blueprint-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 400;
+    color: var(--ink);
+  }
+  .blueprint-role {
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+  }
+  .themes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 20px;
+  }
+  .theme-cell {
+    background: var(--parchment-mid);
+    padding: 18px 20px;
+    border-left: 3px solid var(--parchment-dark);
+    transition: border-color 0.3s;
+  }
+  .theme-cell:hover { border-left-color: var(--gold); }
+  .theme-cell h5 {
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .theme-cell ul { list-style: none; padding: 0; }
+  .theme-cell ul li {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    padding: 4px 0;
+    line-height: 1.55;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+  .theme-cell ul li:last-child { border-bottom: none; }
+
+  /* ── Conclusion ── */
+  .conclusion {
+    text-align: center;
+    padding: 60px 20px;
+    margin-top: 80px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .conclusion-ornament {
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0.7;
+  }
+  .conclusion-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.5em;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+  }
+  .conclusion-close {
+    margin-top: 40px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.9;
+  }
+
+  footer {
+    text-align: center;
+    padding: 48px 40px;
+    font-family: 'Cormorant SC', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--parchment-dark);
+    text-transform: uppercase;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .hero::before, .hero::after { display: none; }
+    main { padding: 60px 24px 80px; }
+    .domain-grid, .themes-grid { grid-template-columns: 1fr; }
+    .horseman-item { grid-template-columns: 1fr; gap: 4px; }
+    .pull { padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ── Hero ── -->
+<header class="hero">
+  <div class="wordmark">Portico</div>
+  <div class="hero-rule"></div>
+  <img src="images/portico-architecture.png" class="hero-arch" alt="Portico Architecture">
+  <p class="hero-subtitle">A Personal Operating System for Compounding Biological and Financial Capital</p>
+  <p class="hero-tag">White Paper</p>
+  <div class="scroll-hint">
+    <span>Read</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Executive Summary ── -->
+  <article class="section" data-section>
+    <p class="section-label">Executive Summary</p>
+    <h1 class="page-title">A Personal Operating System for Durable Life Capital</h1>
+    <p>Portico is a <em>Personal Operating System</em> built on a simple premise: most people in mid- to late-life are losing ground without knowing it — biologically and financially — because the systems around them are reactive, open-loop, and short-term by design.</p>
+    <p>Portico was built from a conviction that <strong>reactive systems are always late</strong> — and that visibility changes trajectory.</p>
+    <p>Portico integrates five Domains — <em>Sleep, Food, Exercise, Mind, and Wealth</em> — each mapped to a primary structural risk: <em>Metabolic Disease, Cardiovascular Disease, Cancer, Neurodegeneration, and Financial Fragility</em>. Rather than treating these in isolation, Portico operates as a closed-loop system where each Domain reinforces the others, compounding biological and financial capital over decades.</p>
+    <p>The <em>guiding principles</em> are durability, measured progress, and risk mitigation — not optimization theater. Portico deliberately avoids biohacking extremism, crisis-driven medical reactivity, speculative financial narratives, and short-term thinking.</p>
+    <div class="pull">The result is a system that doesn't just help you manage your health and wealth. It helps you own them — proactively, and for the long run.</div>
+  </article>
+
+  <!-- ── A. Core Thesis ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">A</span>
+      <h2>Core Thesis</h2>
+    </div>
+    <p>Two forces determine long-term life outcomes: <strong>energy allocation and capital allocation</strong>. Health governs the first; wealth governs the second.</p>
+    <p>Both operate through <strong>compounding, feedback loops, and regulatory systems</strong>. Healthspan without financial stability is fragile. Financial success without biological capacity is hollow.</p>
+    <p>The objective is structural durability across decades. The output is <strong>Optionality</strong> — the ability to absorb shocks without collapse.</p>
+  </article>
+
+  <!-- ── B. Architectural & System Model ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">B</span>
+      <h2>Architectural &amp; System Model</h2>
+    </div>
+    <p>Portico uses a structural metaphor to reinforce systems coherence. Each Domain is assigned a role in the architecture:</p>
+
+    <div class="domain-grid">
+      <div class="domain-card">
+        <div class="domain-card-title">Sleep</div>
+        <div class="domain-card-role">Foundation</div>
+        <div class="domain-card-directive">Sleep is not forced — it is allowed</div>
+      </div>
+      <div class="domain-card">
+        <div class="domain-card-title">Food</div>
+        <div class="domain-card-role">Left Structural Pillar</div>
+        <div class="domain-card-directive">Feed the gut. Protect the liver.</div>
+      </div>
+      <div class="domain-card">
+        <div class="domain-card-title">Exercise</div>
+        <div class="domain-card-role">Right Structural Pillar</div>
+        <div class="domain-card-directive">Inactivity, not age, is the threat</div>
+      </div>
+      <div class="domain-card">
+        <div class="domain-card-title">Mind</div>
+        <div class="domain-card-role">Roof</div>
+        <div class="domain-card-directive">Train your nervous system or it will train you</div>
+      </div>
+      <div class="domain-card" style="grid-column: 1 / -1;">
+        <div class="domain-card-title">Wealth</div>
+        <div class="domain-card-role">Inner Flywheel</div>
+        <div class="domain-card-directive">Money is stored life energy — deploy it wisely</div>
+      </div>
+    </div>
+
+    <div class="figure">
+      <img src="images/portico-domain-structure.png" alt="Figure 1: Portico Domain Structure">
+      <p class="figure-caption">Figure 1 — Portico Domain Structure</p>
+    </div>
+
+    <p>Each Domain contains five Themes that give it operational depth: Core Directives, Founding Principles, Signal Dashboard, Regulatory Signals, and Top Protocols &amp; Interventions.</p>
+
+    <h3>1. Core Directives</h3>
+    <p>Core Directives are cognitively light behavioral anchors. They reduce decision fatigue and simplify execution. They are simple, but metabolically intelligent.</p>
+    <p class="callout">Examples: Eat Real Food — Do Daily — Wind Down</p>
+
+    <h3>2. Founding Principles</h3>
+    <p>Founding Principles provide interpretive depth. They are scientifically grounded but expressed simply. These are longevity-aligned, not performance-obsessed.</p>
+    <p class="callout">Examples: "Inactivity, not age, is the threat" — "Sleep is not forced — it is allowed" — "Diversification is disciplined humility"</p>
+
+    <h3>3. Signal Dashboard</h3>
+    <p>The Signal Dashboard ensures objectivity. It avoids subjective bias by measuring key markers across the five Domains. This is clinically sophisticated, not generic lifestyle advice.</p>
+    <p class="callout">Examples: Fasting insulin — ApoB — Visceral fat</p>
+
+    <h3>4. Regulatory Signals</h3>
+    <p>Regulatory Signals reveal underlying drivers. Hormones and neurochemicals govern adaptation. Together they reveal the interdependence of Domains, rather than isolating them.</p>
+    <p class="callout">Examples: Insulin regulates metabolic flow — Melatonin regulates circadian timing — Oxytocin regulates social buffering</p>
+
+    <h3>5. Top Protocols &amp; Interventions</h3>
+    <p>Top Protocols &amp; Interventions are execution standards — not heroic routines, but sustainable ones, designed for the individual.</p>
+    <p class="callout">Examples: Fixed nightly wind-down ritual — Daylight-aligned meals with lighter evenings — Weekly Zone 2 base and VO₂ stimulus</p>
+
+    <div class="figure">
+      <img src="images/portico-core-directives.png" alt="Figure 2: Portico Core Directives and Founding Principles">
+      <p class="figure-caption">Figure 2 — Portico Core Directives and Founding Principles</p>
+    </div>
+
+    <div class="figure">
+      <img src="images/portico-protocols.png" alt="Figure 3: Portico Top Protocols & Interventions">
+      <p class="figure-caption">Figure 3 — Portico Top Protocols &amp; Interventions</p>
+    </div>
+  </article>
+
+  <!-- ── C. The Five Horsemen ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">C</span>
+      <h2>The Five Horsemen Risk Model</h2>
+    </div>
+    <p>Portico organizes its protocols and interventions around five <em>structural collapse vectors</em> — the Five Horsemen — each linked to a specific Domain:</p>
+
+    <ul class="horsemen-list">
+      <li class="horseman-item">
+        <div>
+          <div class="horseman-name">Metabolic Disease</div>
+          <span class="horseman-domain">Sleep Domain — Foundation</span>
+        </div>
+        <p class="horseman-desc">When sleep fails, metabolic dysregulation amplifies every other risk. Sleep dysregulation drives cortisol rhythm disruption, insulin resistance, and visceral fat accumulation.</p>
+      </li>
+      <li class="horseman-item">
+        <div>
+          <div class="horseman-name">Cardiovascular Disease</div>
+          <span class="horseman-domain">Food Domain — Left Pillar</span>
+        </div>
+        <p class="horseman-desc">What you eat is the most modifiable driver of cardiovascular trajectory. Dietary patterns drive ApoB elevation, endothelial dysfunction, and atherosclerotic progression.</p>
+      </li>
+      <li class="horseman-item">
+        <div>
+          <div class="horseman-name">Cancer</div>
+          <span class="horseman-domain">Exercise Domain — Right Pillar</span>
+        </div>
+        <p class="horseman-desc">Movement is one of the strongest evidence-backed defenses against cancer risk. Physical inactivity drives impaired immune surveillance, chronic inflammation, and insulin/IGF-1 dysregulation.</p>
+      </li>
+      <li class="horseman-item">
+        <div>
+          <div class="horseman-name">Neurodegeneration</div>
+          <span class="horseman-domain">Mind Domain — Roof</span>
+        </div>
+        <p class="horseman-desc">Chronic stress, left unmanaged, accelerates cognitive decline. Elevated cortisol drives neuroinflammation and cognitive decline. Mental health and brain health are inseparable from the body's regulatory systems.</p>
+      </li>
+      <li class="horseman-item">
+        <div>
+          <div class="horseman-name">Financial Fragility</div>
+          <span class="horseman-domain">Wealth Domain — Inner Flywheel</span>
+        </div>
+        <p class="horseman-desc">Financial instability doesn't just drain accounts — it drives biological decay. Chronic financial instability drives persistent stress response, impaired decision quality, and compounded life risk.</p>
+      </li>
+    </ul>
+
+    <div class="figure">
+      <img src="images/portico-horsemen.png" alt="Figure 4: Portico Horsemen Structure">
+      <p class="figure-caption">Figure 4 — Portico Horsemen Structure</p>
+    </div>
+
+    <div class="pull">This is a closed-loop system. Financial instability elevates stress. Stress impairs sleep. Sleep disruption worsens insulin sensitivity. Insulin resistance accelerates metabolic decline. Metabolic instability amplifies cardiovascular and cancer risk.</div>
+  </article>
+
+  <!-- ── D. Quantified Risk Engine ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">D</span>
+      <h2>Quantified Risk Engine</h2>
+    </div>
+    <p>Portico's Risk Engine is built on a single conviction: <strong>slope matters more than state</strong>. Portico introduces four structured quantitative layers designed to measure direction, not just position. Portico focuses on early signal detection — the canaries in the coal mine — before collapse whispers into crisis.</p>
+
+    <div class="risk-layers">
+      <div class="risk-layer">
+        <div class="risk-layer-title">Layer 1 — Horseman Risk Score</div>
+        <p class="risk-layer-desc">Each Horseman is assigned a composite risk score derived from weighted biomarkers and trends drawn from the Signal Dashboard, normalized by age.</p>
+        <p class="risk-layer-example">Example: Metabolic Risk Score = f(insulin, visceral fat, sleep consistency, resting HR)</p>
+      </div>
+      <div class="risk-layer">
+        <div class="risk-layer-title">Layer 2 — Risk Velocity</div>
+        <p class="risk-layer-desc">Risk is not static. Velocity measures the rate of change over time, predicting future divergence before it becomes clinically visible. A slowly rising ApoB within "normal" range may be more dangerous than a high but stable reading.</p>
+        <p class="risk-layer-example">Example: Declining VO₂ max year-over-year — Increasing debt-to-income ratio</p>
+      </div>
+      <div class="risk-layer">
+        <div class="risk-layer-title">Layer 3 — Interaction Index</div>
+        <p class="risk-layer-desc">Domains amplify each other. Most systems measure domains independently. Portico measures amplification. The Interaction Index quantifies cross-domain reinforcement — the system's most distinctive analytical layer.</p>
+        <p class="risk-layer-example">Example: High ApoB + low exercise → accelerated cardiovascular trajectory</p>
+      </div>
+      <div class="risk-layer">
+        <div class="risk-layer-title">Layer 4 — Time Horizon Modeling</div>
+        <p class="risk-layer-desc">Slope matters more than snapshot. Portico trains users to think in trajectories, not lab results. Risk is modeled across a 5-year horizon, 15-year trajectory, and lifetime projection.</p>
+        <p class="risk-layer-example">Shifts thinking from present state to future direction.</p>
+      </div>
+    </div>
+
+    <h3>The Compounding Index &amp; Optionality</h3>
+    <p>Portico synthesizes all four quantitative layers across the five Domains and five Horsemen into a single forward-looking metric: <em>the Compounding Index</em>.</p>
+    <p>It integrates the positive counterpart to each Horseman risk — Metabolic stability, Cardiovascular fitness, Fitness capacity, Cognitive resilience, and Financial stability — weighted by risk velocity, cross-domain interaction, and age. <em>One number, grounded in many systems.</em> Not as reductionism, but as synthesis.</p>
+
+    <div class="pull">Optionality is the ultimate output of compounded biological and financial capital.</div>
+
+    <div class="figure">
+      <img src="images/portico-risk-engine.png" alt="Figure 5: Portico Quantified Risk Engine">
+      <p class="figure-caption">Figure 5 — Portico Quantified Risk Engine</p>
+    </div>
+  </article>
+
+  <!-- ── E. Conclusion ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">E</span>
+      <h2>Conclusion</h2>
+    </div>
+
+    <div class="conclusion">
+      <div class="conclusion-ornament">❧</div>
+      <p class="conclusion-line">Portico is a structured architecture for durable life capital.</p>
+      <p class="conclusion-line">It integrates energy allocation, capital allocation,<br>risk mitigation, and compounding<br>into a single coherent system.</p>
+      <p class="conclusion-line">Portico is a proactive, closed-loop, compounding<br>Personal Operating System.</p>
+      <div class="conclusion-close">
+        <p>The objective is not peak output at 35,<br>but structural durability at 75.</p>
+        <p><em>Portico is the system built to get you there.</em></p>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── Appendix I ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">Appendix I</span>
+      <h2>Architectural Model — Domain Blueprint</h2>
+    </div>
+
+    <!-- Sleep -->
+    <div class="domain-blueprint">
+      <div class="blueprint-header">
+        <span class="blueprint-num">1</span>
+        <div>
+          <div class="blueprint-title">Sleep Domain</div>
+          <div class="blueprint-role">Foundation</div>
+        </div>
+      </div>
+      <div class="themes-grid">
+        <div class="theme-cell">
+          <h5>Core Directives</h5>
+          <ul><li>Wind Down</li><li>Light Right</li><li>Time It</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Founding Principles</h5>
+          <ul><li>Sleep is not forced — it is allowed</li><li>Light sets hormones; darkness restores them</li><li>Every organ keeps time. Align with your clock.</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Signal Dashboard</h5>
+          <ul><li>Resting Heart Rate</li><li>Deep + REM Sleep Duration</li><li>Daylight Exposure</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Regulatory Signals</h5>
+          <ul><li>Melatonin</li><li>Cortisol</li><li>Growth Hormone</li></ul>
+        </div>
+        <div class="theme-cell" style="grid-column: 1 / -1;">
+          <h5>Top Protocols &amp; Interventions</h5>
+          <ul><li>Fixed nightly wind-down ritual</li><li>Morning light + hydration sequence</li><li>Circadian nutrition boundaries</li><li>Temperature optimization</li><li>Environmental protection</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food -->
+    <div class="domain-blueprint">
+      <div class="blueprint-header">
+        <span class="blueprint-num">2</span>
+        <div>
+          <div class="blueprint-title">Food Domain</div>
+          <div class="blueprint-role">Left Structural Pillar</div>
+        </div>
+      </div>
+      <div class="themes-grid">
+        <div class="theme-cell">
+          <h5>Core Directives</h5>
+          <ul><li>Eat Real Food</li><li>Eat Less</li><li>Mostly Plants</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Founding Principles</h5>
+          <ul><li>If your grandmother wouldn't recognize it, reconsider it</li><li>Hunger is a signal — respect it</li><li>Feed the gut. Protect the liver.</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Signal Dashboard</h5>
+          <ul><li>Fasting Insulin</li><li>ApoB</li><li>Visceral Fat</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Regulatory Signals</h5>
+          <ul><li>Insulin</li><li>Leptin</li><li>GLP-1</li></ul>
+        </div>
+        <div class="theme-cell" style="grid-column: 1 / -1;">
+          <h5>Top Protocols &amp; Interventions</h5>
+          <ul><li>Daylight-aligned eating</li><li>Satiety-based pacing</li><li>Protein + fiber + color diversity</li><li>Quarterly metabolic review</li><li>Purposeful supplementation</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exercise -->
+    <div class="domain-blueprint">
+      <div class="blueprint-header">
+        <span class="blueprint-num">3</span>
+        <div>
+          <div class="blueprint-title">Exercise Domain</div>
+          <div class="blueprint-role">Right Structural Pillar</div>
+        </div>
+      </div>
+      <div class="themes-grid">
+        <div class="theme-cell">
+          <h5>Core Directives</h5>
+          <ul><li>Do Something</li><li>Do Daily</li><li>Diversify</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Founding Principles</h5>
+          <ul><li>Inactivity, not age, is the threat</li><li>Consistency beats intensity</li><li>Sustainability beats heroics</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Signal Dashboard</h5>
+          <ul><li>VO₂ Max</li><li>Grip Strength</li><li>HRV</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Regulatory Signals</h5>
+          <ul><li>Cortisol</li><li>Testosterone</li><li>Growth Hormone</li></ul>
+        </div>
+        <div class="theme-cell" style="grid-column: 1 / -1;">
+          <h5>Top Protocols &amp; Interventions</h5>
+          <ul><li>Weekly Zone 2 base</li><li>Weekly VO₂ stimulus</li><li>Two strength sessions per week</li><li>Daily movement minimum</li><li>Joyful sport engagement</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mind -->
+    <div class="domain-blueprint">
+      <div class="blueprint-header">
+        <span class="blueprint-num">4</span>
+        <div>
+          <div class="blueprint-title">Mind Domain</div>
+          <div class="blueprint-role">Roof</div>
+        </div>
+      </div>
+      <div class="themes-grid">
+        <div class="theme-cell">
+          <h5>Core Directives</h5>
+          <ul><li>Breathe</li><li>Seek Awe</li><li>Connect</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Founding Principles</h5>
+          <ul><li>Train your nervous system or it will train you</li><li>Perspective reduces inflammation</li><li>Connection is biological protection</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Signal Dashboard</h5>
+          <ul><li>hs-CRP</li><li>Respiratory Rate</li><li>Meaningful Social Time</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Regulatory Signals</h5>
+          <ul><li>Oxytocin</li><li>Serotonin</li><li>Cortisol</li></ul>
+        </div>
+        <div class="theme-cell" style="grid-column: 1 / -1;">
+          <h5>Top Protocols &amp; Interventions</h5>
+          <ul><li>Daily breath regulation</li><li>Weekly awe exposure</li><li>Scheduled social contact</li><li>Dedicated learning block</li><li>Inflammation reset as needed</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wealth -->
+    <div class="domain-blueprint">
+      <div class="blueprint-header">
+        <span class="blueprint-num">5</span>
+        <div>
+          <div class="blueprint-title">Wealth Domain</div>
+          <div class="blueprint-role">Inner Flywheel</div>
+        </div>
+      </div>
+      <div class="themes-grid">
+        <div class="theme-cell">
+          <h5>Core Directives</h5>
+          <ul><li>Aim for Freedom</li><li>Compound</li><li>Diversify</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Founding Principles</h5>
+          <ul><li>Money is stored life energy — deploy it wisely</li><li>Compounding favors patience over brilliance</li><li>Diversification is disciplined humility</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Signal Dashboard</h5>
+          <ul><li>Passive Income / Expense Ratio</li><li>Annual Compound Rate</li><li>Total Asset Value</li></ul>
+        </div>
+        <div class="theme-cell">
+          <h5>Regulatory Signals</h5>
+          <ul><li>Dopamine</li><li>Cortisol</li><li>Serotonin</li></ul>
+        </div>
+        <div class="theme-cell" style="grid-column: 1 / -1;">
+          <h5>Top Protocols &amp; Interventions</h5>
+          <ul><li>Automated index investing</li><li>3–6 month emergency reserve</li><li>High-interest debt elimination</li><li>Quarterly capital review</li><li>Predictable income stream building</li></ul>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── Appendix II ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">Appendix II</span>
+      <h2>System Model — Operating Principles</h2>
+    </div>
+
+    <h3>1. Proactive vs. Reactive</h3>
+    <p>Traditional systems are reactive: healthcare intervenes after pathology appears; finance reacts after volatility or loss. Portico operates upstream — before the damage compounds. It seeks to identify risk early, slow risk velocity, and leverage data-driven feedback — before collapse occurs.</p>
+    <p><em>Portico is adjacent to, but remains outside of, medical diagnosis and investment advice.</em></p>
+
+    <h3>2. Closed-Loop vs. Open-Loop</h3>
+    <p>Portico does not stop at behavior. It follows the full chain:</p>
+    <div class="pull">Behavior → Physiological adaptation → Biomarker shift → Regulatory modulation → Compounding outcome</div>
+    <p><em>Example: Consistent sleep → normalized cortisol amplitude → improved insulin sensitivity → reduced visceral fat → lower metabolic risk trajectory</em></p>
+    <p><em>Or in reverse: Financial instability → elevated stress → poor sleep → increased insulin resistance → accelerated metabolic decline</em></p>
+
+    <h3>3. Compounding vs. Diminishing</h3>
+    <p>Both metabolic health and financial capital obey compounding mathematics. Small, consistent improvements — in insulin sensitivity, VO₂ max, HRV, or savings rate — produce exponential divergence over decades.</p>
+    <p class="callout">In Portico, consistency beats intensity. Compounding favors patience over brilliance.</p>
+
+    <h3>4. Capital Preservation vs. Expansion Modes</h3>
+    <p>Both biology and wealth operate in two strategic modes, and Portico dynamically toggles between them based on risk profile.</p>
+    <div class="domain-grid">
+      <div class="domain-card">
+        <div class="domain-card-title">Preservation Mode</div>
+        <div class="domain-card-role">When risk is elevated</div>
+        <div class="domain-card-directive">Risk mitigation — Damage control — Stabilization<br><br><em>Elevated ApoB → dietary tightening. High debt → aggressive deleveraging.</em></div>
+      </div>
+      <div class="domain-card">
+        <div class="domain-card-title">Expansion Mode</div>
+        <div class="domain-card-role">When the foundation is secure</div>
+        <div class="domain-card-directive">Capacity building — Reserve creation — Optionality expansion<br><br><em>Improving VO₂ max. Building passive income streams.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── Appendix III ── -->
+  <article class="section" data-section>
+    <div class="section-header">
+      <span class="section-numeral">Appendix III</span>
+      <h2>User Journeys — Case Studies</h2>
+    </div>
+    <p>Available upon request. Profiles include anonymized but real cases across metabolic, cardiovascular, and fitness risk vectors illustrating Portico in practice:</p>
+    <ul class="horsemen-list">
+      <li class="horseman-item">
+        <div class="horseman-name">Joe</div>
+        <p class="horseman-desc">Elevated ApoB + high visceral fat</p>
+      </li>
+      <li class="horseman-item">
+        <div class="horseman-name">Sara</div>
+        <p class="horseman-desc">Elevated cortisol + sedentary lifestyle</p>
+      </li>
+      <li class="horseman-item">
+        <div class="horseman-name">Matt</div>
+        <p class="horseman-desc">Low VO₂ max + chronic sleep deficit</p>
+      </li>
+    </ul>
+  </article>
+
+</main>
+
+<footer>
+  Portico &nbsp;·&nbsp; Durable Life Capital &nbsp;·&nbsp; White Paper
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progress-bar').style.width = (scrollTop / docH * 100) + '%';
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('[data-section]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
