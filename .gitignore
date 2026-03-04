@@ -1,0 +1,41 @@
+# Environment
+.env
+.env.local
+local.db
+*.png
+artifacts/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.egg-info/
+.venv/
+dist/
+
+# uv
+.uv/
+uv.lock
+
+# Data outputs
+data/outputs/
+*.png
+*.csv.bak
+
+# IDE
+.cursor/
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+
+# Langfuse / Qdrant local volumes
+langfuse_data/
+qdrant_data/
+
+# Test cache
+.pytest_cache/
+.coverage
+
