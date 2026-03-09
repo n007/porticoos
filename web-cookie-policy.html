@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookie Policy — Portico Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0e; --parchment: #f5f2ec; --portico: #1a2e4a;
+    --portico-mid: #2c4a6e; --gold: #c8a84b; --gold-light: #f0e4c0;
+    --mist: #8a8a8a; --rule: rgba(200,168,75,0.3); --bg: #faf8f4;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(250,248,244,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.12em; color: var(--portico); text-decoration: none; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 13px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mist); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--portico); }
+  .hero { padding: 160px 48px 80px; border-bottom: 1px solid var(--rule); max-width: 1100px; margin: 0 auto; }
+  .hero-label { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; display: block; }
+  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 6vw, 80px); font-weight: 300; line-height: 1.05; color: var(--portico); margin-bottom: 32px; }
+  .hero-meta { display: flex; gap: 48px; flex-wrap: wrap; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--mist); letter-spacing: 0.08em; }
+  .hero-meta span { display: flex; gap: 8px; align-items: center; }
+  .hero-meta span::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .content { max-width: 800px; margin: 0 auto; padding: 80px 48px 120px; }
+  section { margin-bottom: 72px; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 8px; display: block; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; color: var(--portico); line-height: 1.2; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  p { margin-bottom: 16px; color: #333; }
+  ul { padding-left: 0; list-style: none; margin-bottom: 16px; }
+  ul li { position: relative; padding-left: 20px; margin-bottom: 10px; font-size: 15px; color: #444; }
+  ul li::before { content: '—'; position: absolute; left: 0; color: var(--gold); font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  /* ── COOKIE COUNT HERO ── */
+  .cookie-stat {
+    text-align: center; padding: 64px 48px;
+    background: var(--portico);
+    margin: 64px 0;
+  }
+  .cookie-stat .number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px; line-height: 1; font-weight: 300;
+    color: var(--gold); display: block;
+  }
+  .cookie-stat .label {
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-top: 8px;
+  }
+  .cookie-stat .sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 20px; color: rgba(255,255,255,0.6); margin-top: 16px;
+  }
+
+  /* ── COOKIE CARDS ── */
+  .cookie-cards { display: flex; flex-direction: column; gap: 2px; margin: 32px 0; }
+  .cookie-card {
+    background: white; border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    padding: 24px 28px;
+    display: grid; grid-template-columns: 200px 1fr 120px 80px;
+    gap: 16px; align-items: start;
+  }
+  .cookie-name { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--portico); font-weight: 400; }
+  .cookie-type-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; background: rgba(200,168,75,0.12); color: var(--gold); border: 1px solid var(--rule); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+  .cookie-purpose { font-size: 13px; color: #555; line-height: 1.5; }
+  .cookie-duration { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--mist); }
+  .cookie-third { font-family: 'DM Mono', monospace; font-size: 11px; color: #27ae60; }
+
+  /* ── NEVER TABLE ── */
+  .never-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin: 24px 0; }
+  .never-item { background: var(--bg); padding: 20px 24px; }
+  .never-item::before { content: '✕'; display: block; font-family: 'DM Mono', monospace; font-size: 16px; color: #c0392b; margin-bottom: 8px; }
+  .never-item p { font-size: 13px; color: #555; margin: 0; line-height: 1.5; }
+
+  .contact-block { background: var(--portico); color: white; padding: 40px 48px; margin-top: 80px; }
+  .contact-block .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .contact-block p { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 4px; }
+  .contact-block a { color: var(--gold); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 14px; }
+  footer { background: var(--ink); color: rgba(255,255,255,0.4); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; letter-spacing: 0.06em; }
+  footer .logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; letter-spacing: 0.15em; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  footer nav a { color: rgba(255,255,255,0.4); text-decoration: none; margin-left: 24px; transition: color 0.2s; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  footer nav a:hover { color: var(--gold); }
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; } .nav-links { display: none; }
+    .hero { padding: 120px 24px 60px; } .content { padding: 48px 24px 80px; }
+    .cookie-card { grid-template-columns: 1fr; }
+    .never-list { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    footer nav a { margin: 0 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://porticoos.framer.website/" class="nav-logo">Portico Life</a>
+  <div class="nav-links">
+    <a href="https://porticoos.framer.website/">Home</a>
+    <a href="https://porticoos.framer.website/about">About</a>
+    <a href="https://porticoos.framer.website/blog">Blog</a>
+    <a href="https://porticoos.framer.website/contact">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">Legal · Platform Document</span>
+  <h1>Cookie<br><em>Policy</em></h1>
+  <div class="hero-meta">
+    <span>Portico Life, LLC</span>
+    <span>Version 1.0</span>
+    <span>Effective: 04.20.2026</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <section id="s1">
+    <span class="section-number">01</span>
+    <h2>What Are Cookies?</h2>
+    <p>Cookies are small text files stored on your device when you visit a website or use a web application. They allow the site to remember information about your visit. Not all cookies are the same — some are essential for the site to function, while others are used for tracking or advertising.</p>
+  </section>
+
+  <div class="cookie-stat">
+    <span class="number">3</span>
+    <div class="label">Total Cookies Used by Portico</div>
+    <div class="sub">All strictly necessary. Zero tracking. Zero advertising.</div>
+  </div>
+
+  <section id="s2">
+    <span class="section-number">02</span>
+    <h2>Cookies We Use</h2>
+    <p>The Portico platform uses exactly three cookies, all strictly necessary for the Services to function:</p>
+
+    <div class="cookie-cards">
+      <div class="cookie-card">
+        <div>
+          <div class="cookie-name">portico_session</div>
+          <div class="cookie-type-badge">Strictly Necessary</div>
+        </div>
+        <div class="cookie-purpose">Maintains your authenticated session so you don't need to log in on every page load. Required for the platform to function.</div>
+        <div class="cookie-duration">Session<br>(expires on close)</div>
+        <div class="cookie-third">First-party only</div>
+      </div>
+      <div class="cookie-card">
+        <div>
+          <div class="cookie-name">portico_csrf</div>
+          <div class="cookie-type-badge">Strictly Necessary</div>
+        </div>
+        <div class="cookie-purpose">Protects against cross-site request forgery attacks. A fundamental security requirement for any authenticated web application.</div>
+        <div class="cookie-duration">Session<br>(expires on close)</div>
+        <div class="cookie-third">First-party only</div>
+      </div>
+      <div class="cookie-card">
+        <div>
+          <div class="cookie-name">portico_prefs</div>
+          <div class="cookie-type-badge">Functional</div>
+        </div>
+        <div class="cookie-purpose">Stores interface preferences you've chosen (e.g., display settings, theme). You can clear this at any time through your browser settings.</div>
+        <div class="cookie-duration">1 year</div>
+        <div class="cookie-third">First-party only</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <span class="section-number">03</span>
+    <h2>What We Do Not Use</h2>
+    <p>This is a deliberate design decision. Your usage patterns within Portico are health-adjacent data. We don't think that data should be monetized or shared with advertising networks.</p>
+
+    <div class="never-list">
+      <div class="never-item"><p>Analytics cookies (Google Analytics, Mixpanel, Amplitude, or equivalent)</p></div>
+      <div class="never-item"><p>Advertising or retargeting cookies of any kind</p></div>
+      <div class="never-item"><p>Social media tracking cookies</p></div>
+      <div class="never-item"><p>Third-party behavioral tracking</p></div>
+      <div class="never-item"><p>Fingerprinting or canvas-based device identification</p></div>
+      <div class="never-item"><p>Any cookie that shares your data with external parties</p></div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <span class="section-number">04</span>
+    <h2>Managing Cookies</h2>
+    <p>Because the cookies we use are strictly necessary for the Services to function, you cannot opt out of them while using Portico. If you disable all cookies in your browser, you will not be able to log in or use the platform.</p>
+    <p>You can clear your cookies at any time through your browser settings. This will log you out of Portico and reset any interface preferences you've saved.</p>
+  </section>
+
+  <section id="s5">
+    <span class="section-number">05</span>
+    <h2>Updates to This Policy</h2>
+    <p>We will update this Cookie Policy if we ever introduce new cookies. We will notify you by email before any new cookies are set. The three cookies listed above will remain the complete set for as long as possible — minimalism is a design principle here, not an oversight.</p>
+  </section>
+
+  <div class="contact-block">
+    <div class="label">Questions About Cookies</div>
+    <p>Portico Life, LLC</p>
+    <a href="mailto:contact@portico.life">contact@portico.life</a>
+  </div>
+</div>
+
+<footer>
+  <span class="logo">Portico Life</span>
+  <nav>
+    <a href="#">Privacy</a>
+    <a href="#">Cookies</a>
+    <a href="#">Data Handling</a>
+    <a href="https://porticoos.framer.website/">Home</a>
+  </nav>
+</footer>
+
+</body>
+</html>

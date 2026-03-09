@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Handling Policy — Portico Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --parchment: #f5f2ec;
+    --portico: #1a2e4a;
+    --portico-mid: #2c4a6e;
+    --gold: #c8a84b;
+    --gold-light: #f0e4c0;
+    --mist: #8a8a8a;
+    --rule: rgba(200,168,75,0.3);
+    --bg: #faf8f4;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(250,248,244,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.12em; color: var(--portico); text-decoration: none; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mist); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--portico); }
+  .hero { padding: 160px 48px 80px; border-bottom: 1px solid var(--rule); max-width: 1100px; margin: 0 auto; }
+  .hero-label { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; display: block; }
+  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 6vw, 80px); font-weight: 300; line-height: 1.05; color: var(--portico); letter-spacing: -0.01em; margin-bottom: 32px; }
+  .hero-meta { display: flex; gap: 48px; flex-wrap: wrap; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--mist); letter-spacing: 0.08em; }
+  .hero-meta span { display: flex; gap: 8px; align-items: center; }
+  .hero-meta span::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .summary { max-width: 1100px; margin: 0 auto; padding: 48px; border-left: 3px solid var(--gold); background: linear-gradient(135deg, rgba(200,168,75,0.06) 0%, transparent 60%); margin-top: 64px; }
+  .summary-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .summary p { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; font-style: italic; line-height: 1.6; color: var(--portico); }
+  .content { max-width: 900px; margin: 0 auto; padding: 80px 48px 120px; }
+  section { margin-bottom: 72px; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 8px; display: block; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; color: var(--portico); line-height: 1.2; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  h3 { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--portico-mid); margin: 32px 0 12px; }
+  p { margin-bottom: 16px; color: #333; }
+  ul, ol { padding-left: 0; list-style: none; margin-bottom: 16px; }
+  ul li, ol li { position: relative; padding-left: 20px; margin-bottom: 10px; font-size: 15px; color: #444; }
+  ul li::before { content: '—'; position: absolute; left: 0; color: var(--gold); font-family: 'DM Mono', monospace; font-size: 12px; }
+  ol { counter-reset: items; }
+  ol li { counter-increment: items; }
+  ol li::before { content: counter(items) '.'; position: absolute; left: 0; color: var(--gold); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 400; }
+  .alert { border: 1px solid rgba(200,168,75,0.4); border-left: 3px solid var(--gold); background: var(--gold-light); padding: 24px 28px; margin: 24px 0; }
+  .alert-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #8a6a10; margin-bottom: 10px; }
+  .alert p { font-size: 14px; color: #5a4a1a; margin: 0; }
+
+  /* ── TIER CARDS ── */
+  .tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin: 24px 0; }
+  .tier-card { background: var(--bg); padding: 24px 28px; border-top: 3px solid transparent; }
+  .tier-card.t1 { border-color: #c0392b; }
+  .tier-card.t2 { border-color: #e67e22; }
+  .tier-card.t3 { border-color: var(--gold); }
+  .tier-card.t4 { border-color: #27ae60; }
+  .tier-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); margin-bottom: 6px; }
+  .tier-name { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 500; color: var(--portico); margin-bottom: 8px; }
+  .tier-desc { font-size: 13px; color: #555; line-height: 1.5; }
+  .tier-ai { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; margin-top: 8px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .tier-ai.never { background: rgba(192,57,43,0.1); color: #c0392b; border: 1px solid rgba(192,57,43,0.3); }
+  .tier-ai.yes { background: rgba(39,174,96,0.1); color: #27ae60; border: 1px solid rgba(39,174,96,0.3); }
+
+  /* ── BIG TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 13px; }
+  .data-table thead tr { background: var(--portico); color: white; }
+  .data-table thead th { padding: 12px 14px; text-align: left; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; }
+  .data-table tbody tr:nth-child(even) { background: var(--parchment); }
+  .data-table tbody tr:nth-child(odd) { background: white; }
+  .data-table td { padding: 11px 14px; vertical-align: top; border-bottom: 1px solid var(--rule); color: #333; }
+  .data-table td:first-child { font-weight: 500; color: var(--portico-mid); }
+
+  /* ── PIPELINE ── */
+  .pipeline { margin: 24px 0; }
+  .pipeline-step { display: flex; gap: 20px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  .pipeline-step:last-child { border-bottom: none; }
+  .step-num { flex-shrink: 0; width: 32px; height: 32px; background: var(--portico); color: var(--gold); font-family: 'DM Mono', monospace; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+  .step-content strong { display: block; font-size: 14px; font-weight: 500; color: var(--portico); margin-bottom: 4px; }
+  .step-content p { font-size: 13px; color: #555; margin: 0; line-height: 1.5; }
+
+  .contact-block { background: var(--portico); color: white; padding: 40px 48px; margin-top: 80px; }
+  .contact-block .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .contact-block p { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 4px; }
+  .contact-block a { color: var(--gold); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 14px; }
+  footer { background: var(--ink); color: rgba(255,255,255,0.4); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; letter-spacing: 0.06em; }
+  footer .logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; letter-spacing: 0.15em; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  footer nav a { color: rgba(255,255,255,0.4); text-decoration: none; margin-left: 24px; transition: color 0.2s; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  footer nav a:hover { color: var(--gold); }
+  @media (max-width: 768px) { nav { padding: 16px 24px; } .nav-links { display: none; } .hero { padding: 120px 24px 60px; } .summary { padding: 32px 24px; margin-top: 40px; } .content { padding: 48px 24px 80px; } .tier-grid { grid-template-columns: 1fr; } footer { flex-direction: column; gap: 16px; text-align: center; } footer nav a { margin: 0 12px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://porticoos.framer.website/" class="nav-logo">Portico Life</a>
+  <div class="nav-links">
+    <a href="https://porticoos.framer.website/">Home</a>
+    <a href="https://porticoos.framer.website/about">About</a>
+    <a href="https://porticoos.framer.website/blog">Blog</a>
+    <a href="https://porticoos.framer.website/contact">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">Legal · Technical Governance</span>
+  <h1>Data Handling<br><em>Policy</em></h1>
+  <div class="hero-meta">
+    <span>Portico Life, LLC</span>
+    <span>Version 1.0</span>
+    <span>Effective: 04.20.2026</span>
+  </div>
+</div>
+
+<div class="summary">
+  <div class="summary-title">Purpose of This Document</div>
+  <p>This policy describes how Portico collects, classifies, processes, stores, and deletes health and behavioral data across all Portico Agents. It supplements the Privacy Policy and is intended for participants, partners, and compliance review.</p>
+</div>
+
+<div class="content">
+
+  <section id="s1">
+    <span class="section-number">01</span>
+    <h2>Scope</h2>
+    <p>This policy applies to all data processed by the Portico platform and all current and future Portico Agents: Sage (Food &amp; Metabolic), Dusk (Sleep), Apex (Movement), Still (Mind), and Grove (Wealth). This policy is incorporated by reference into all Portico participant agreements and pilot consent forms.</p>
+  </section>
+
+  <section id="s2">
+    <span class="section-number">02</span>
+    <h2>Data Classification Framework</h2>
+    <p>All data processed by Portico is assigned to one of four tiers. Each tier carries specific handling, storage, and transmission rules.</p>
+    <div class="tier-grid">
+      <div class="tier-card t1">
+        <div class="tier-label">Tier 1</div>
+        <div class="tier-name">Personal Identifiers (PII)</div>
+        <div class="tier-desc">Name, email, device IDs, IP address. Highest protection level. Never transmitted to external systems.</div>
+        <span class="tier-ai never">AI Input: Never</span>
+      </div>
+      <div class="tier-card t2">
+        <div class="tier-label">Tier 2</div>
+        <div class="tier-name">Protected Health Data</div>
+        <div class="tier-desc">CGM readings, wearable vitals, blood markers, food photos. Encrypted at rest and in transit at all times.</div>
+        <span class="tier-ai yes">AI Input: Anonymized only</span>
+      </div>
+      <div class="tier-card t3">
+        <div class="tier-label">Tier 3</div>
+        <div class="tier-name">Derived Insights</div>
+        <div class="tier-desc">Metabolic state analyses, pattern findings, experiment results. Account-linked, not shared externally.</div>
+        <span class="tier-ai yes">AI Input: Yes, Tier 1 stripped</span>
+      </div>
+      <div class="tier-card t4">
+        <div class="tier-label">Tier 4</div>
+        <div class="tier-name">Anonymized Aggregate</div>
+        <div class="tier-desc">De-identified population patterns, platform averages. Unlinked to any individual; used to improve models.</div>
+        <span class="tier-ai yes">AI Input: Yes, freely</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <span class="section-number">03</span>
+    <h2>Data Collection by Agent</h2>
+
+    <h3>Sage — Food &amp; Metabolic</h3>
+    <table class="data-table">
+      <thead><tr><th>Data Type</th><th>Classification</th><th>Source Examples</th><th>Storage Location</th></tr></thead>
+      <tbody>
+        <tr><td>CGM glucose readings</td><td>Tier 2</td><td>Dexcom Stelo</td><td>Local device, encrypted</td></tr>
+        <tr><td>Food photographs</td><td>Tier 2 (raw) / Tier 3 (analysis)</td><td>Portico app camera</td><td>Local (raw); cloud (analysis)</td></tr>
+        <tr><td>Wearable vitals</td><td>Tier 2</td><td>Apple Watch</td><td>Local device, encrypted</td></tr>
+        <tr><td>Blood panel markers</td><td>Tier 2</td><td>Function Health</td><td>Local device, encrypted</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Future Agents (Dusk, Apex, Still, Grove)</h3>
+    <p>As additional Portico Agents are activated, this section will be expanded with domain-specific data inventories. Each new agent introduction will be preceded by a policy update and participant notification at least 14 days in advance.</p>
+  </section>
+
+  <section id="s4">
+    <span class="section-number">04</span>
+    <h2>AI Processing Pipeline</h2>
+    <p>Portico uses AI to generate insights. The following pipeline governs how data is handled before reaching any AI model:</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <strong>Local Collection</strong>
+          <p>Raw data is collected and stored locally on the participant's device.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <strong>PII Stripping</strong>
+          <p>An automated anonymization layer removes all Tier 1 identifiers (name, email, device IDs, IP addresses) before any data leaves the device.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <strong>Encrypted Transmission</strong>
+          <p>Anonymized Tier 2 and Tier 3 data is transmitted to cloud infrastructure over TLS-encrypted channels.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <strong>AI Processing</strong>
+          <p>AI models receive only de-identified inputs. No model receives data that can be linked to a specific individual without an internal lookup key that is never transmitted.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <strong>Insight Storage</strong>
+          <p>Model outputs are classified as Tier 3 Insights and stored account-linked on secure encrypted cloud infrastructure.</p>
+        </div>
+      </div>
+    </div>
+    <div class="alert">
+      <div class="alert-title">External AI Services</div>
+      <p>Portico uses external AI providers (e.g., large language model APIs) to generate analyses. All data submitted to these services has had Tier 1 PII stripped. These providers operate under data processing agreements that prohibit training on or retaining submitted data.</p>
+    </div>
+  </section>
+
+  <section id="s5">
+    <span class="section-number">05</span>
+    <h2>Storage Architecture</h2>
+
+    <h3>5.1 Local Storage</h3>
+    <p>Raw Tier 1 and Tier 2 data is stored on-device using encrypted SQLite databases. This data is not backed up to cloud services without explicit participant consent.</p>
+
+    <h3>5.2 Cloud Storage</h3>
+    <p>Derived insights (Tier 3) and anonymized aggregates (Tier 4) are stored in cloud infrastructure using AES-256 encryption at rest, TLS 1.2+ in transit, role-based access control with least-privilege principle, and automated access logging with anomaly detection.</p>
+  </section>
+
+  <section id="s6">
+    <span class="section-number">06</span>
+    <h2>Data Retention Schedule</h2>
+    <table class="data-table">
+      <thead><tr><th>Data Type</th><th>Retention Period</th><th>Deletion Trigger</th><th>Method</th></tr></thead>
+      <tbody>
+        <tr><td>PII (Tier 1)</td><td>Account lifetime + 30 days</td><td>Account deletion request</td><td>Secure overwrite</td></tr>
+        <tr><td>Raw health data (Tier 2)</td><td>Account lifetime + 30 days</td><td>Account deletion request</td><td>Secure overwrite</td></tr>
+        <tr><td>Derived insights (Tier 3)</td><td>Account lifetime + 30 days</td><td>Account deletion request</td><td>Secure delete</td></tr>
+        <tr><td>Anonymized aggregate (Tier 4)</td><td>Indefinite</td><td>N/A (no PII)</td><td>N/A</td></tr>
+        <tr><td>Backup copies</td><td>90 days max</td><td>Rolling purge</td><td>Automated deletion</td></tr>
+        <tr><td>Legal hold data</td><td>As required by law</td><td>Court order / resolution</td><td>Secure archive</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="s7">
+    <span class="section-number">07</span>
+    <h2>Breach Response Protocol</h2>
+    <ul>
+      <li><strong>Hours 0–24:</strong> Contain the breach. Isolate affected systems. Assess scope and data categories involved.</li>
+      <li><strong>Hours 24–48:</strong> Internal investigation. Determine root cause. Identify affected participants.</li>
+      <li><strong>Hours 48–72:</strong> Notify affected participants by email. Notify applicable regulatory authorities if required by law.</li>
+      <li><strong>Days 4–30:</strong> Root cause remediation. Post-incident review. Policy updates as needed.</li>
+    </ul>
+  </section>
+
+  <section id="s8">
+    <span class="section-number">08</span>
+    <h2>Third-Party Data Processors</h2>
+    <ul>
+      <li><strong>Cloud Infrastructure:</strong> Hosting and compute. Process anonymized/encrypted Tier 2–4 data only.</li>
+      <li><strong>AI Model Providers:</strong> LLM APIs. De-identified inputs only. Prohibited from training on or retaining submitted data.</li>
+      <li><strong>Monitoring &amp; Observability:</strong> System monitoring. Processes metadata and logs; no health data.</li>
+    </ul>
+  </section>
+
+  <div class="contact-block">
+    <div class="label">Questions or Compliance Inquiries</div>
+    <p>Portico Life, LLC · [Address]</p>
+    <a href="mailto:contact@portico.life">contact@portico.life</a>
+  </div>
+</div>
+
+<footer>
+  <span class="logo">Portico Life</span>
+  <nav>
+    <a href="#">Privacy</a>
+    <a href="#">Cookies</a>
+    <a href="#">Data Handling</a>
+    <a href="https://porticoos.framer.website/">Home</a>
+  </nav>
+</footer>
+
+</body>
+</html>

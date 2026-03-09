@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Blueprint — Portico Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --portico: #1a2e4a;
+    --portico-mid: #2c4a6e;
+    --portico-light: #edf1f7;
+    --gold: #c8a84b;
+    --gold-light: #f5edd8;
+    --mist: #8a8a8a;
+    --rule: rgba(200,168,75,0.25);
+    --bg: #faf8f4;
+    --parchment: #f5f2ec;
+
+    /* Agent accent colors */
+    --sage: #4a7c59;
+    --sage-bg: #edf4ef;
+    --dusk: #3d4f7c;
+    --dusk-bg: #eef0f8;
+    --apex: #7c4a2a;
+    --apex-bg: #f7f0eb;
+    --still: #5a6b4a;
+    --still-bg: #eff2eb;
+    --grove: #2a5c4a;
+    --grove-bg: #eaf2ee;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 56px;
+    background: rgba(250,248,244,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.12em; color: var(--portico); text-decoration: none; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a { font-size: 12px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--portico); }
+  .nav-pill {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 7px 18px; border: 1px solid var(--portico);
+    color: var(--portico); text-decoration: none; transition: all 0.2s;
+  }
+  .nav-pill:hover { background: var(--portico); color: white; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 56px 80px;
+    position: relative;
+    overflow: hidden;
+    background: var(--portico);
+  }
+
+  .hero-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(200,168,75,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,168,75,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-arc {
+    position: absolute; bottom: -200px; right: -200px;
+    width: 700px; height: 700px;
+    border: 1px solid rgba(200,168,75,0.12);
+    border-radius: 50%;
+  }
+  .hero-arc-2 {
+    position: absolute; bottom: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border: 1px solid rgba(200,168,75,0.08);
+    border-radius: 50%;
+  }
+
+  .hero-trilogy {
+    position: absolute; top: 140px; right: 56px;
+    display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+  }
+  .trilogy-item {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); display: flex; gap: 12px; align-items: center;
+  }
+  .trilogy-item.active { color: var(--gold); }
+  .trilogy-item::after { content: ''; width: 20px; height: 1px; background: currentColor; }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 28px; display: block;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(64px, 9vw, 128px);
+    font-weight: 300; line-height: 0.92;
+    color: white; letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(18px, 2.5vw, 26px); font-weight: 300;
+    color: rgba(255,255,255,0.55); max-width: 600px;
+    line-height: 1.5; margin-bottom: 48px;
+  }
+
+  .hero-scroll {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .hero-scroll::before {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--gold); opacity: 0.4;
+  }
+
+  /* ── INTRO ── */
+  .intro {
+    max-width: 860px; margin: 0 auto;
+    padding: 120px 56px 0;
+  }
+
+  .intro-pull {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 3vw, 36px); font-weight: 300; font-style: italic;
+    line-height: 1.4; color: var(--portico);
+    border-left: 3px solid var(--gold);
+    padding-left: 32px; margin-bottom: 48px;
+  }
+
+  .intro p {
+    font-size: 17px; color: #444; margin-bottom: 20px; line-height: 1.8;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    max-width: 1200px; margin: 0 auto;
+    padding: 100px 56px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px; display: block;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4.5vw, 56px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--portico); margin-bottom: 24px;
+  }
+
+  .section-intro {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 20px; color: var(--mist); line-height: 1.6;
+    max-width: 700px; margin-bottom: 64px;
+  }
+
+  /* ── CIRCADIAN SECTION ── */
+  .circadian-section {
+    background: var(--portico);
+    padding: 100px 56px;
+  }
+
+  .circadian-section h2 { color: white; }
+  .circadian-section .section-label { color: var(--gold); }
+  .circadian-section .section-intro { color: rgba(255,255,255,0.5); }
+
+  .clock-visual {
+    display: flex; gap: 0; margin: 48px 0;
+    border: 1px solid rgba(200,168,75,0.2);
+    overflow: hidden;
+  }
+
+  .clock-slot {
+    flex: 1; padding: 32px 28px;
+    border-right: 1px solid rgba(200,168,75,0.15);
+    transition: background 0.3s;
+  }
+  .clock-slot:last-child { border-right: none; }
+
+  .clock-slot.morning { background: rgba(200,168,75,0.06); }
+  .clock-slot.midday { background: rgba(200,168,75,0.03); }
+  .clock-slot.evening { background: rgba(61,79,124,0.12); }
+  .clock-slot.night { background: rgba(61,79,124,0.2); }
+
+  .clock-time {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+  }
+
+  .clock-slot h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 400; color: white;
+    margin-bottom: 16px;
+  }
+
+  .clock-agents {
+    display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
+  }
+
+  .clock-agent {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; letter-spacing: 0.04em;
+  }
+  .clock-agent-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .clock-agent span { color: rgba(255,255,255,0.7); }
+
+  .clock-note {
+    font-size: 12px; color: rgba(255,255,255,0.35);
+    font-style: italic; line-height: 1.4;
+  }
+
+  /* Dot colors */
+  .dot-sage { background: #6aad82; }
+  .dot-dusk { background: #7b8fc7; }
+  .dot-apex { background: #c4834a; }
+  .dot-still { background: #8aad6a; }
+  .dot-grove { background: #4aad8a; }
+  .dot-portico { background: var(--gold); }
+
+  .circadian-principle {
+    border-top: 1px solid rgba(200,168,75,0.2);
+    padding-top: 48px; margin-top: 48px;
+    max-width: 800px;
+  }
+
+  .circadian-principle p {
+    font-family: 'Cormorant Garamond', serif; font-size: 21px;
+    font-weight: 300; font-style: italic; line-height: 1.6;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+  }
+
+  /* ── AGENT CARDS ── */
+  .agents-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px; background: var(--rule);
+    margin-top: 0;
+  }
+
+  .agent-card {
+    background: var(--bg); padding: 44px 36px;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .agent-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+  .agent-card.sage::before { background: var(--sage); }
+  .agent-card.dusk::before { background: var(--dusk); }
+  .agent-card.apex::before { background: var(--apex); }
+  .agent-card.still::before { background: var(--still); }
+  .agent-card.grove::before { background: var(--grove); }
+  .agent-card.portico-card::before { background: var(--gold); }
+
+  .agent-card:hover { background: white; }
+
+  .agent-card-label {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .agent-card.sage .agent-card-label { color: var(--sage); }
+  .agent-card.dusk .agent-card-label { color: var(--dusk); }
+  .agent-card.apex .agent-card-label { color: var(--apex); }
+  .agent-card.still .agent-card-label { color: var(--still); }
+  .agent-card.grove .agent-card-label { color: var(--grove); }
+  .agent-card.portico-card .agent-card-label { color: var(--gold); }
+
+  .agent-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 400; line-height: 1;
+    margin-bottom: 4px; color: var(--portico);
+  }
+
+  .agent-domain {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--mist);
+    margin-bottom: 24px;
+  }
+
+  .agent-role-badge {
+    display: inline-block; font-family: 'DM Mono', monospace;
+    font-size: 10px; padding: 3px 10px; margin-bottom: 24px;
+    letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid;
+  }
+  .agent-card.sage .agent-role-badge { color: var(--sage); border-color: rgba(74,124,89,0.3); background: var(--sage-bg); }
+  .agent-card.dusk .agent-role-badge { color: var(--dusk); border-color: rgba(61,79,124,0.3); background: var(--dusk-bg); }
+  .agent-card.apex .agent-role-badge { color: var(--apex); border-color: rgba(124,74,42,0.3); background: var(--apex-bg); }
+  .agent-card.still .agent-role-badge { color: var(--still); border-color: rgba(90,107,74,0.3); background: var(--still-bg); }
+  .agent-card.grove .agent-role-badge { color: var(--grove); border-color: rgba(42,92,74,0.3); background: var(--grove-bg); }
+  .agent-card.portico-card .agent-role-badge { color: var(--gold); border-color: rgba(200,168,75,0.3); background: var(--gold-light); }
+
+  .agent-philosophy {
+    font-size: 14px; line-height: 1.7; color: #555;
+    margin-bottom: 24px;
+  }
+
+  .agent-data {
+    border-top: 1px solid var(--rule); padding-top: 20px;
+  }
+  .agent-data-label {
+    font-family: 'DM Mono', monospace; font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mist); margin-bottom: 8px;
+  }
+  .agent-data-items {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .agent-data-item {
+    font-size: 11px; padding: 3px 10px;
+    background: var(--parchment); color: #555;
+    letter-spacing: 0.03em;
+  }
+
+  .status-pill {
+    display: inline-block; font-family: 'DM Mono', monospace;
+    font-size: 9px; padding: 3px 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-top: 16px;
+  }
+  .status-pilot { background: rgba(74,124,89,0.12); color: var(--sage); border: 1px solid rgba(74,124,89,0.3); }
+  .status-planned { background: rgba(138,138,138,0.08); color: var(--mist); border: 1px solid rgba(138,138,138,0.2); }
+  .status-active { background: rgba(200,168,75,0.12); color: var(--gold); border: 1px solid rgba(200,168,75,0.3); }
+
+  /* ── COMPOUNDING INDEX ── */
+  .compounding-section {
+    background: var(--parchment);
+    padding: 100px 56px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .compounding-section h2 { color: var(--portico); }
+
+  .chain {
+    display: flex; flex-direction: column; gap: 0;
+    max-width: 700px; margin: 48px 0;
+  }
+
+  .chain-item {
+    display: flex; gap: 24px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--rule);
+  }
+  .chain-item:last-child { border-bottom: none; }
+
+  .chain-arrow {
+    flex-shrink: 0; font-family: 'DM Mono', monospace;
+    font-size: 14px; color: var(--gold); padding-top: 2px;
+  }
+
+  .chain-content strong {
+    display: block; font-size: 15px; font-weight: 500;
+    color: var(--portico); margin-bottom: 2px;
+  }
+  .chain-content span { font-size: 14px; color: var(--mist); }
+
+  .compounding-outcome {
+    background: var(--portico); padding: 32px 40px;
+    max-width: 700px; margin-top: 48px;
+  }
+  .compounding-outcome .outcome-label {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+  }
+  .compounding-outcome p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300; font-style: italic;
+    color: rgba(255,255,255,0.75); line-height: 1.5; margin: 0;
+  }
+
+  /* ── CLOSING ── */
+  .closing {
+    max-width: 860px; margin: 0 auto;
+    padding: 120px 56px;
+    text-align: center;
+  }
+
+  .closing h2 {
+    font-size: clamp(40px, 5vw, 64px);
+    margin-bottom: 32px;
+  }
+
+  .closing p {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 22px; color: var(--mist); line-height: 1.6;
+    max-width: 600px; margin: 0 auto 48px;
+  }
+
+  .closing-links {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+  }
+  .closing-link {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 14px 28px; text-decoration: none; transition: all 0.2s;
+  }
+  .closing-link.primary {
+    background: var(--portico); color: white;
+  }
+  .closing-link.primary:hover { background: var(--portico-mid); }
+  .closing-link.secondary {
+    border: 1px solid var(--portico); color: var(--portico);
+  }
+  .closing-link.secondary:hover { background: var(--portico); color: white; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.35);
+    padding: 40px 56px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer .logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; letter-spacing: 0.15em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
+  footer .footer-links { display: flex; gap: 28px; }
+  footer .footer-links a { color: rgba(255,255,255,0.35); text-decoration: none; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  footer .footer-links a:hover { color: var(--gold); }
+
+  @media (max-width: 1024px) {
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+    .clock-visual { flex-direction: column; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px 64px; }
+    .intro, .section, .circadian-section, .compounding-section, .closing { padding-left: 24px; padding-right: 24px; }
+    .agents-grid { grid-template-columns: 1fr; }
+    .hero-trilogy { display: none; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://porticoos.framer.website/" class="nav-logo">Portico Life</a>
+  <div class="nav-links">
+    <a href="https://porticoos.framer.website/">Home</a>
+    <a href="https://porticoos.framer.website/manifesto">Manifesto</a>
+    <a href="https://porticoos.framer.website/white-paper">White Paper</a>
+    <a href="https://porticoos.framer.website/contact" class="nav-pill">Get in touch</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-arc"></div>
+  <div class="hero-arc-2"></div>
+
+  <div class="hero-trilogy">
+    <div class="trilogy-item">Manifesto — Why</div>
+    <div class="trilogy-item">White Paper — What</div>
+    <div class="trilogy-item active">Blueprint — How</div>
+  </div>
+
+  <span class="hero-label">The Blueprint · How Portico Works</span>
+  <h1>Six agents.<br><em>One rhythm.</em></h1>
+  <p class="hero-sub">The architecture behind the operating system — how Portico's agents work, what each one does, and how they move together like a circadian clock.</p>
+  <div class="hero-scroll">Scroll to explore</div>
+</div>
+
+<!-- ── INTRO ── -->
+<div class="intro">
+  <p class="intro-pull">You have read the Why. You have read the What. This is the How — the engine beneath the architecture.</p>
+  <p>Portico is not a dashboard. It is not a tracker. It is not an aggregator of devices. It is a proactive, closed-loop intelligence system with six specialized agents, each focused on a single domain of your biological and financial life — and one orchestrating intelligence that holds them all together.</p>
+  <p>What follows is the operating model: how each agent thinks, what it measures, what it does, and how the system moves as one.</p>
+</div>
+
+<!-- ── CIRCADIAN SECTION ── -->
+<div class="circadian-section">
+  <div style="max-width:1100px; margin:0 auto;">
+    <span class="section-label">The Orchestration Layer</span>
+    <h2>Portico moves like<br>a circadian clock.</h2>
+    <p class="section-intro">The body doesn't treat all its systems equally at all times. Neither does Portico.</p>
+
+    <div class="clock-visual">
+      <div class="clock-slot morning">
+        <div class="clock-time">05:00 — 10:00</div>
+        <h3>Morning</h3>
+        <div class="clock-agents">
+          <div class="clock-agent"><div class="clock-agent-dot dot-sage"></div><span>Sage — metabolic priming</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-apex"></div><span>Apex — exercise timing</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-dusk"></div><span>Dusk — morning light protocol</span></div>
+        </div>
+        <p class="clock-note">Cortisol peaks. Insulin sensitivity is highest. Exercise and food timing now compound forward into the rest of the day.</p>
+      </div>
+      <div class="clock-slot midday">
+        <div class="clock-time">10:00 — 17:00</div>
+        <h3>Midday</h3>
+        <div class="clock-agents">
+          <div class="clock-agent"><div class="clock-agent-dot dot-sage"></div><span>Sage — food timing &amp; patterns</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-still"></div><span>Still — awe, breath, connection</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-grove"></div><span>Grove — capital decisions</span></div>
+        </div>
+        <p class="clock-note">Cognitive performance peaks mid-morning. Emotional regulation is strongest. Grove surfaces financial decisions here, not at midnight.</p>
+      </div>
+      <div class="clock-slot evening">
+        <div class="clock-time">17:00 — 21:00</div>
+        <h3>Evening</h3>
+        <div class="clock-agents">
+          <div class="clock-agent"><div class="clock-agent-dot dot-dusk"></div><span>Dusk — wind-down initiation</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-sage"></div><span>Sage — evening food boundaries</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-still"></div><span>Still — meditation prompt</span></div>
+        </div>
+        <p class="clock-note">Melatonin begins to rise. Dusk takes the lead. Light exposure now shapes what happens in four hours — and the quality of tomorrow morning.</p>
+      </div>
+      <div class="clock-slot night">
+        <div class="clock-time">21:00 — 05:00</div>
+        <h3>Night</h3>
+        <div class="clock-agents">
+          <div class="clock-agent"><div class="clock-agent-dot dot-dusk"></div><span>Dusk — sleep architecture</span></div>
+          <div class="clock-agent"><div class="clock-agent-dot dot-portico"></div><span>Portico — overnight synthesis</span></div>
+        </div>
+        <p class="clock-note">The system integrates. While you sleep, Portico computes the day's cross-domain patterns and prepares the morning brief. Recovery is not passive — it is the compounding.</p>
+      </div>
+    </div>
+
+    <div class="circadian-principle">
+      <p>Morning light affects tonight's sleep. Food timing through the day affects tomorrow's metabolic state. Exercise timing affects recovery and sleep architecture. Stress from a financial decision at midnight impairs cortisol rhythm the next morning.</p>
+      <p>Portico holds all of these temporal connections simultaneously — not as a feature, but as the foundation of how the system thinks. This is what separates an operating system from a collection of apps.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── AGENTS ── -->
+<div class="section">
+  <span class="section-label">The Six Agents</span>
+  <h2>Each domain.<br>One agent.</h2>
+  <p class="section-intro">Five domain agents, each with a single domain of responsibility. One orchestrator that holds them together. Each agent is named for what it embodies, not what it does.</p>
+</div>
+
+<div style="max-width:1200px; margin: 0 auto; padding: 0 56px 100px;">
+<div class="agents-grid">
+
+  <!-- SAGE -->
+  <div class="agent-card sage">
+    <div class="agent-card-label">Food · Metabolic</div>
+    <div class="agent-name">Sage</div>
+    <div class="agent-domain">Left Structural Pillar</div>
+    <div class="agent-role-badge">Mitigates: Cardiovascular Disease</div>
+    <p class="agent-philosophy">Sage does not plan your meals. Sage shows you what is happening in your body right now — and why. The see-connect-shift framework: see your metabolic state, connect your food timing and choices to that state, shift one variable at a time with measurable feedback. One small experiment. Always one.</p>
+    <div class="agent-data">
+      <div class="agent-data-label">Reads</div>
+      <div class="agent-data-items">
+        <span class="agent-data-item">CGM · Dexcom Stelo</span>
+        <span class="agent-data-item">Food photos</span>
+        <span class="agent-data-item">Apple Watch</span>
+        <span class="agent-data-item">Blood panel</span>
+      </div>
+    </div>
+    <div><span class="status-pill status-pilot">Active — Pilot</span></div>
+  </div>
+
+  <!-- DUSK -->
+  <div class="agent-card dusk">
+    <div class="agent-card-label">Sleep</div>
+    <div class="agent-name">Dusk</div>
+    <div class="agent-domain">Foundation</div>
+    <div class="agent-role-badge">Mitigates: Metabolic Disease</div>
+    <p class="agent-philosophy">Sleep happens to you. That is the point. Dusk does not try to force sleep — it creates the conditions in which sleep can occur. Its model is CBT-I: Cognitive Behavioral Therapy for Insomnia, the most clinically effective sleep intervention. Three levers: wind-down, light, and timing. When a night goes badly, Dusk encourages. It does not catastrophize.</p>
+    <div class="agent-data">
+      <div class="agent-data-label">Reads</div>
+      <div class="agent-data-items">
+        <span class="agent-data-item">Sleep stages</span>
+        <span class="agent-data-item">HRV</span>
+        <span class="agent-data-item">Resting heart rate</span>
+        <span class="agent-data-item">User context</span>
+      </div>
+    </div>
+    <div><span class="status-pill status-planned">Planned</span></div>
+  </div>
+
+  <!-- APEX -->
+  <div class="agent-card apex">
+    <div class="agent-card-label">Movement · Exercise</div>
+    <div class="agent-name">Apex</div>
+    <div class="agent-domain">Right Structural Pillar</div>
+    <div class="agent-role-badge">Mitigates: Cancer</div>
+    <p class="agent-philosophy">The aerobic triangle: Zone 2 base and VO₂ max peak define two sides. The goal is to maximize the area between them. Strength is the third pillar. Balance is the fourth. Apex gives you the framework and personalized protocols — not micromanaged execution details. It won't tell you to run at 5 miles per hour. It will explain why your aerobic base is the foundation of everything else.</p>
+    <div class="agent-data">
+      <div class="agent-data-label">Reads</div>
+      <div class="agent-data-items">
+        <span class="agent-data-item">VO₂ max</span>
+        <span class="agent-data-item">HRV</span>
+        <span class="agent-data-item">Activity data</span>
+        <span class="agent-data-item">Workout logs</span>
+      </div>
+    </div>
+    <div><span class="status-pill status-planned">Planned</span></div>
+  </div>
+
+  <!-- STILL -->
+  <div class="agent-card still">
+    <div class="agent-card-label">Mind · Cognition</div>
+    <div class="agent-name">Still</div>
+    <div class="agent-domain">The Roof</div>
+    <div class="agent-role-badge">Mitigates: Neurodegeneration</div>
+    <p class="agent-philosophy">Still operates with deliberate humility. Three entry points, minimum effective dose. Meditation — five minutes of breath regulation has measurable physiological effect. Awe — going outside and encountering something larger than yourself is one of the fastest cortisol reducers known. Connection — social contact is biological protection. Still explains what happens in your body when you do each of these. It illuminates. It does not prescribe.</p>
+    <div class="agent-data">
+      <div class="agent-data-label">Reads</div>
+      <div class="agent-data-items">
+        <span class="agent-data-item">HRV</span>
+        <span class="agent-data-item">hs-CRP</span>
+        <span class="agent-data-item">Mood logs</span>
+        <span class="agent-data-item">Social time</span>
+      </div>
+    </div>
+    <div><span class="status-pill status-planned">Planned</span></div>
+  </div>
+
+  <!-- GROVE -->
+  <div class="agent-card grove">
+    <div class="agent-card-label">Wealth · Financial Wellness</div>
+    <div class="agent-name">Grove</div>
+    <div class="agent-domain">Inner Flywheel</div>
+    <div class="agent-role-badge">Mitigates: Financial Fragility</div>
+    <p class="agent-philosophy">A grove of trees grows slowly. Together over decades, it becomes something substantial and self-sustaining. Grove is patient, disciplined, never impulsive. Rooted in legendary investors' principles — patience over brilliance, diversification as disciplined humility, compounding as the only honest strategy. Grove never executes a trade without your explicit confirmation. It will never pull the trigger on its own.</p>
+    <div class="agent-data">
+      <div class="agent-data-label">Reads</div>
+      <div class="agent-data-items">
+        <span class="agent-data-item">Risk tolerance</span>
+        <span class="agent-data-item">Capital position</span>
+        <span class="agent-data-item">Expense structure</span>
+      </div>
+    </div>
+    <div><span class="status-pill status-planned">Planned</span></div>
+  </div>
+
+  <!-- PORTICO ORCHESTRATOR -->
+  <div class="agent-card portico-card">
+    <div class="agent-card-label">Platform · Orchestrator</div>
+    <div class="agent-name">Portico</div>
+    <div class="agent-domain">Circadian Intelligence Layer</div>
+    <div class="agent-role-badge">The Compounding Index</div>
+    <p class="agent-philosophy">Portico is not a router. It is a temporally aware orchestrator modeled on the body's own circadian rhythm. It weights agent attention by time of day. It holds cross-domain connections — the morning light that shapes tonight's sleep, the food timing that shapes tomorrow's metabolism. At the center of everything, Portico synthesizes all five domains into a single forward-looking metric: the Compounding Index.</p>
+    <div class="agent-data">
+      <div class="agent-data-label">Synthesizes</div>
+      <div class="agent-data-items">
+        <span class="agent-data-item">All 5 domains</span>
+        <span class="agent-data-item">Risk velocity</span>
+        <span class="agent-data-item">Cross-domain interactions</span>
+        <span class="agent-data-item">Time horizon</span>
+      </div>
+    </div>
+    <div><span class="status-pill status-active">In Development</span></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ── COMPOUNDING ── -->
+<div class="compounding-section">
+  <div style="max-width:1100px; margin:0 auto;">
+    <span class="section-label">The System in Motion</span>
+    <h2>No domain operates alone.</h2>
+    <p class="section-intro">This is not a feature. It is a design principle. The domains amplify each other — in both directions.</p>
+
+    <div class="chain">
+      <div class="chain-item">
+        <div class="chain-arrow">→</div>
+        <div class="chain-content">
+          <strong>Consistent sleep</strong>
+          <span>normalizes cortisol rhythm</span>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-arrow">→</div>
+        <div class="chain-content">
+          <strong>Normalized cortisol</strong>
+          <span>improves insulin sensitivity</span>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-arrow">→</div>
+        <div class="chain-content">
+          <strong>Improved insulin sensitivity</strong>
+          <span>reduces visceral fat accumulation</span>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-arrow">→</div>
+        <div class="chain-content">
+          <strong>Reduced visceral fat</strong>
+          <span>lowers metabolic risk trajectory</span>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-arrow">→</div>
+        <div class="chain-content">
+          <strong>Lower metabolic risk</strong>
+          <span>reduces cognitive load and financial decision impairment</span>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-arrow">→</div>
+        <div class="chain-content">
+          <strong>Better decisions</strong>
+          <span>improve capital allocation and compound Grove's flywheel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="compounding-outcome">
+      <div class="outcome-label">The Output</div>
+      <p>Optionality. The ability to choose your work. The ability to absorb shocks without collapse. The ability to redirect time. This is the ultimate output of compounded biological and financial capital — and it is what Portico exists to build.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CLOSING ── -->
+<div class="closing">
+  <span class="section-label">Next</span>
+  <h2>The architecture<br>is ready.</h2>
+  <p>Sage is accepting pilot participants now. The other agents follow as the system learns from real patterns in real lives.</p>
+  <div class="closing-links">
+    <a href="https://porticoos.framer.website/manifesto" class="closing-link secondary">Read the Manifesto</a>
+    <a href="https://porticoos.framer.website/white-paper" class="closing-link secondary">Read the White Paper</a>
+    <a href="https://porticoos.framer.website/contact" class="closing-link primary">Request Pilot Access</a>
+  </div>
+</div>
+
+<footer>
+  <span class="logo">Portico Life</span>
+  <div class="footer-links">
+    <a href="https://porticoos.framer.website/">Home</a>
+    <a href="#">Privacy</a>
+    <a href="#">Cookies</a>
+    <a href="https://porticoos.framer.website/contact">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
