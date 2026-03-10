@@ -72,6 +72,41 @@
   .cookie-duration { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--mist); }
   .cookie-third { font-family: 'DM Mono', monospace; font-size: 11px; color: #27ae60; }
 
+  /* ── CLOSING ── */
+  .closing {
+    max-width: 860px; margin: 0 auto;
+    padding: 120px 56px;
+    text-align: center;
+  }
+
+  .closing h2 {
+    font-size: clamp(40px, 5vw, 64px);
+    margin-bottom: 32px;
+  }
+
+  .closing p {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 22px; color: var(--mist); line-height: 1.6;
+    max-width: 600px; margin: 0 auto 48px;
+  }
+
+  .closing-links {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+  }
+  .closing-link {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 14px 28px; text-decoration: none; transition: all 0.2s;
+  }
+  .closing-link.primary {
+    background: var(--portico); color: white;
+  }
+  .closing-link.primary:hover { background: var(--portico-mid); }
+  .closing-link.secondary {
+    border: 1px solid var(--portico); color: var(--portico);
+  }
+  .closing-link.secondary:hover { background: var(--portico); color: white; }
+  
   /* ── NEVER TABLE ── */
   .never-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin: 24px 0; }
   .never-item { background: var(--bg); padding: 20px 24px; }
@@ -98,6 +133,7 @@
 </head>
 <body>
 
+<!--
 <nav>
   <a href="https://porticoos.framer.website/" class="nav-logo">Portico Life</a>
   <div class="nav-links">
@@ -107,7 +143,8 @@
     <a href="https://porticoos.framer.website/contact">Contact</a>
   </div>
 </nav>
-
+-->
+	
 <div class="hero">
   <span class="hero-label">Legal · Platform Document</span>
   <h1>Cookie<br><em>Policy</em></h1>
@@ -196,13 +233,15 @@
     <p>We will update this Cookie Policy if we ever introduce new cookies. We will notify you by email before any new cookies are set. The three cookies listed above will remain the complete set for as long as possible — minimalism is a design principle here, not an oversight.</p>
   </section>
 
-  <div class="contact-block">
-    <div class="label">Questions About Cookies</div>
-    <p>Portico Life, LLC</p>
-    <a href="mailto:contact@portico.life">contact@portico.life</a>
+  <div class="closing-links">
+    <a href="https://porticoos.framer.website/manifesto" class="closing-link secondary">Manifesto (Why)</a>
+    <a href="https://porticoos.framer.website/white-paper" class="closing-link secondary">White Paper (What)</a>
+	<a href="https://porticoos.framer.website/blueprint" class="closing-link secondary">Blueprint (How)</a>
+    <a href="https://porticoos.framer.website/contact" class="closing-link primary">Contact Us</a>
   </div>
 </div>
 
+<!--
 <footer>
   <span class="logo">Portico Life</span>
   <nav>
@@ -212,6 +251,7 @@
     <a href="https://porticoos.framer.website/">Home</a>
   </nav>
 </footer>
+-->
 
 </body>
 </html>
